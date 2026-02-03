@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #ffe4e1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            z-index: 10;
+        }
+        h1 { color: #d63384; margin-bottom: 10px; }
+        h2 { color: #d63384; margin-bottom: 10px; }
+        p { color: #555; }
+        
+        textarea {
+            width: 100%;
+            height: 80px;
+            margin: 15px 0;
+            padding: 10px;
+            border: 2px solid #ffb6c1;
+            border-radius: 10px;
+            resize: none;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        #yesBtn { background-color: #ff4d6d; color: white; font-weight: bold; }
+        #yesBtn:hover { transform: scale(1.1); background-color: #ff1a4a; }
+        
+        #noBtn { background-color: #f8f9fa; color: #6c757d; border: 1px solid #ddd; position: absolute; }
+
+        .hidden { display: none; }
+        img { width: 140px; margin-bottom: 10px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainCard">
+        <img src="https://lh3.googleusercontent.com/u/0/d/1i9QW1NadjZTDx5oykSb8Wbj12xE2IlnO">
+        <h1>Anshul</h1>
+        <h2>Will you be my Valentine? ❤️</h2>
+        <p>Leave a little note for me (optional):</p>
+        
+        <form action="https://formspree.io/f/mwvqjdaz" method="POST" id="valentineForm">
+            <textarea name="message" placeholder="Type something sweet..."></textarea>
+            <input type="hidden" name="answer" value="YES!">
+            
+            <div class="buttons">
+                <button type="submit" id="yesBtn">Yes, I will! ✨</button>
+                <button type="button" id="noBtn" onmouseover="moveButton()">No</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container hidden" id="successCard">
+        <h1>Best Valentine Ever! 🥰</h1>
+        <h2>Thank you my love 🥰</h2>
+        <p>I can't wait to see you.</p>
+        <img src="https://bouqs.com/blog/wp-content/uploads/2024/02/shutterstock_368490641-min.jpg">
+    </div>
+
+    <script>
+        // Move the "No" button
+        function moveButton() {
+            const btn = document.getElementById('noBtn');
+            // Ensure button stays within visible screen area
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 50);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 50);
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        // Handle AJAX submission
+        const form = document.getElementById('valentineForm');
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const yesBtn = document.getElementById('yesBtn');
+            yesBtn.innerText = "Sending...";
+            yesBtn.disabled = true;
+
+            const data = new FormData(form);
+            try {
+                await fetch(form.action, {
+                    method: 'POST',
+                    body: data,
+                    headers: { 'Accept': 'application/json' }
+                });
+                document.getElementById('mainCard').classList.add('hidden');
+                document.getElementById('successCard').classList.remove('hidden');
+            } catch (error) {
+                alert("Oops! Something went wrong, but I still love you!");
+            }
+        };
+    </script>
+</body>
+</html>
